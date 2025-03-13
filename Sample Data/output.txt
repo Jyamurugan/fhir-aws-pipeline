@@ -9,5 +9,22 @@ ethinicity
 
 Claim
 id
+claim_type
+priority stat normal deferred
 billable period start
 billable period end
+patient_id
+created date
+facility
+provider
+insurance references
+diagnosis references
+total
+
+claim items
+id
+billable period start
+billable period end
+patient_id
+created date
+tota
