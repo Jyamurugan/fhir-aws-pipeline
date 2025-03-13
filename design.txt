@@ -1,0 +1,21 @@
+FHIR bundle will be uploaded using 2 methods
+1. API Gateway (HTTP endpoint) with a limit of 20MB payload size using API key type authentication
+2. Through S3 direct upload (to the bucket)
+
+FHIR bundle processor
+Splits the fhir bundle
+    1. Takes the Patient Resource and sends to Patient SQS
+    2. Takes the Claims Resource and sends to Claims SQS
+
+Patient Processor
+Take FHIR Patient as input and outputs
+Patient JSON
+
+id uuid
+birthsex
+gender
+birthdate date
+race
+ethinicity
+
+Claims Processor

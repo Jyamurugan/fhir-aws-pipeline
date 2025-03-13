@@ -1,0 +1,13 @@
+Patient
+
+id uuid
+birthsex char(1)
+gender varchar(6)
+birthdate date
+race
+ethinicity
+
+Claim
+id
+billable period start
+billable period end

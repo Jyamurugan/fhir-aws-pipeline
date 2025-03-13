@@ -1,0 +1,232 @@
+{
+  "resourceType": "ExplanationOfBenefit",
+  "id": "84991189-3a51-17ee-67b0-952b6851cb0a",
+  "contained": [
+    {
+      "resourceType": "ServiceRequest",
+      "id": "referral",
+      "status": "completed",
+      "intent": "order",
+      "subject": {
+        "reference": "urn:uuid:dbc4a3f7-9c69-4435-3ce3-4e1988ab6b91"
+      },
+      "requester": {
+        "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999947796"
+      },
+      "performer": [
+        {
+          "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999947796"
+        }
+      ]
+    },
+    {
+      "resourceType": "Coverage",
+      "id": "coverage",
+      "status": "active",
+      "type": {
+        "text": "NO_INSURANCE"
+      },
+      "beneficiary": {
+        "reference": "urn:uuid:dbc4a3f7-9c69-4435-3ce3-4e1988ab6b91"
+      },
+      "payor": [
+        {
+          "display": "NO_INSURANCE"
+        }
+      ]
+    }
+  ],
+  "identifier": [
+    {
+      "system": "https://bluebutton.cms.gov/resources/variables/clm_id",
+      "value": "802c9b6e-8b93-c088-4846-93e938dba290"
+    },
+    {
+      "system": "https://bluebutton.cms.gov/resources/identifier/claim-group",
+      "value": "99999999999"
+    }
+  ],
+  "status": "active",
+  "type": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/claim-type",
+        "code": "professional"
+      }
+    ]
+  },
+  "use": "claim",
+  "patient": {
+    "reference": "urn:uuid:dbc4a3f7-9c69-4435-3ce3-4e1988ab6b91"
+  },
+  "billablePeriod": {
+    "start": "1976-09-18T22:12:47+00:00",
+    "end": "1977-09-18T22:12:47+00:00"
+  },
+  "created": "1976-09-18T22:12:47+00:00",
+  "insurer": {
+    "display": "NO_INSURANCE"
+  },
+  "provider": {
+    "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999947796"
+  },
+  "referral": {
+    "reference": "#referral"
+  },
+  "facility": {
+    "reference": "Location?identifier=https://github.com/synthetichealth/synthea|16162e2e-393c-3162-8e09-a84a60d825c4",
+    "display": "WHITLEY WELLNESS LLC"
+  },
+  "claim": {
+    "reference": "urn:uuid:802c9b6e-8b93-c088-4846-93e938dba290"
+  },
+  "outcome": "complete",
+  "careTeam": [
+    {
+      "sequence": 1,
+      "provider": {
+        "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999947796"
+      },
+      "role": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/claimcareteamrole",
+            "code": "primary",
+            "display": "Primary provider"
+          }
+        ]
+      }
+    }
+  ],
+  "diagnosis": [
+    {
+      "sequence": 1,
+      "diagnosisReference": {
+        "reference": "urn:uuid:fed419a9-b9b2-130d-2cc0-8623220c0d9b"
+      },
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/ex-diagnosistype",
+              "code": "principal"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "insurance": [
+    {
+      "focal": true,
+      "coverage": {
+        "reference": "#coverage",
+        "display": "NO_INSURANCE"
+      }
+    }
+  ],
+  "item": [
+    {
+      "sequence": 1,
+      "category": {
+        "coding": [
+          {
+            "system": "https://bluebutton.cms.gov/resources/variables/line_cms_type_srvc_cd",
+            "code": "1",
+            "display": "Medical care"
+          }
+        ]
+      },
+      "productOrService": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "410620009",
+            "display": "Well child visit (procedure)"
+          }
+        ],
+        "text": "Well child visit (procedure)"
+      },
+      "servicedPeriod": {
+        "start": "1976-09-18T21:57:47+00:00",
+        "end": "1976-09-18T22:12:47+00:00"
+      },
+      "locationCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/ex-serviceplace",
+            "code": "19",
+            "display": "Off Campus-Outpatient Hospital"
+          }
+        ]
+      },
+      "encounter": [
+        {
+          "reference": "urn:uuid:2fae0e14-5528-1dc9-e682-5bd60bf7e018"
+        }
+      ]
+    },
+    {
+      "sequence": 2,
+      "diagnosisSequence": [
+        1
+      ],
+      "category": {
+        "coding": [
+          {
+            "system": "https://bluebutton.cms.gov/resources/variables/line_cms_type_srvc_cd",
+            "code": "1",
+            "display": "Medical care"
+          }
+        ]
+      },
+      "productOrService": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "160968000",
+            "display": "Risk activity involvement (finding)"
+          }
+        ],
+        "text": "Risk activity involvement (finding)"
+      },
+      "servicedPeriod": {
+        "start": "1976-09-18T21:57:47+00:00",
+        "end": "1976-09-18T22:12:47+00:00"
+      },
+      "locationCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/ex-serviceplace",
+            "code": "19",
+            "display": "Off Campus-Outpatient Hospital"
+          }
+        ]
+      }
+    }
+  ],
+  "total": [
+    {
+      "category": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/adjudication",
+            "code": "submitted",
+            "display": "Submitted Amount"
+          }
+        ],
+        "text": "Submitted Amount"
+      },
+      "amount": {
+        "value": 704.20,
+        "currency": "USD"
+      }
+    }
+  ],
+  "payment": {
+    "amount": {
+      "value": 0.0,
+      "currency": "USD"
+    }
+  }
+}
