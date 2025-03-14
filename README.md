@@ -12,3 +12,17 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 * `npx cdk deploy`  deploy this stack to your default AWS account/region
 * `npx cdk diff`    compare deployed stack with current state
 * `npx cdk synth`   emits the synthesized CloudFormation template
+
+
+## SAM Application Testing
+
+To learn more about the AWS SAM CLI, visit the [AWS SAM CLI home page](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html).
+
+[AWS CDK + SAM] (https://docs.aws.amazon.com/cdk/v2/guide/testing.html)
+
+```
+cdk synth --no-staging
+
+sam local invoke -e path_to_event -t cdk.out\FhirAwsPipelineStack.template.json
+```
+

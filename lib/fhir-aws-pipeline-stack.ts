@@ -118,8 +118,8 @@ export class FhirAwsPipelineStack extends cdk.Stack {
     const createLambdaFunction = (functionName: string, environment?: { [key: string]: string }) => {
       return new lambda.Function(this, functionName, {
         runtime: lambda.Runtime.PYTHON_3_13,
-        handler: 'app.handler',
-        code: lambda.Code.fromAsset(`./projects/${functionName}`),
+        handler: 'app.main.handler',
+        code: lambda.Code.fromAsset(`projects/${functionName}/package.zip`),
         environment,
         functionName
       });

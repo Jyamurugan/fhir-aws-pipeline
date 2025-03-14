@@ -6,3 +6,29 @@ node_modules
 # CDK asset staging directory
 .cdk.staging
 cdk.out
+
+
+# Python projects
+projects/**/*.pyc
+projects/**/__pycache__/
+projects/**/.pytest_cache/
+projects/**/.mypy_cache/
+projects/**/.env
+projects/**/.venv
+projects/**/env/
+projects/**/venv/
+projects/**/.DS_Store
+projects/**/.coverage
+projects/**/build/
+projects/**/dist/
+projects/**/.tox/
+projects/**/.nox/
+projects/**/.coverage.*
+projects/**/.hypothesis/
+projects/**/.pytest_cache/
+projects/**/.vscode/
+projects/**/.idea/
+projects/**/.ropeproject/
+projects/**/.uv/
+projects/**/packages
+projects/**/package.zip
