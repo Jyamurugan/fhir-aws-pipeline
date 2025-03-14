@@ -20,6 +20,8 @@ To learn more about the AWS SAM CLI, visit the [AWS SAM CLI home page](https://d
 
 [AWS CDK + SAM] (https://docs.aws.amazon.com/cdk/v2/guide/testing.html)
 
+https://pypi.org/project/poetry-plugin-lambda-build/
+
 ```
 cdk synth --no-staging
 
