@@ -6,6 +6,8 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as s3n from 'aws-cdk-lib/aws-s3-notifications';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+import * as sns from 'aws-cdk-lib/aws-sns';
+import * as sns_subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
 
 export class FhirAwsPipelineStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -76,6 +78,7 @@ export class FhirAwsPipelineStack extends cdk.Stack {
      *  destination bucket fhir-bundle-source
      */
 
+    // code goes here
     // S3 Buckets
     const fhirBundleSourceBucket = new s3.Bucket(this, 'fhir-bundle-source');
     const fhirResourcesBucket = new s3.Bucket(this, 'fhir-resources');
@@ -100,24 +103,31 @@ export class FhirAwsPipelineStack extends cdk.Stack {
     const fhirProceduresQueue = createQueueWithDLQ('fhir-procedures-queue');
     const fhirMedicationsQueue = createQueueWithDLQ('fhir-medications-queue');
 
+    // SNS Topic
+    const fhirBundleTopic = new sns.Topic(this, 'fhir-bundle-topic');
+
+    // Subscribe SQS queues to the SNS topic
+    fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirPatientQueue.queue));
+    fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirClaimsQueue.queue));
+    fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirVisitsQueue.queue));
+    fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirDiagnosisQueue.queue));
+    fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirProceduresQueue.queue));
+    fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirMedicationsQueue.queue));
+
     // Lambda Functions
     const createLambdaFunction = (functionName: string, environment?: { [key: string]: string }) => {
       return new lambda.Function(this, functionName, {
         runtime: lambda.Runtime.PYTHON_3_13,
-        handler: 'index.handler',
-        code: lambda.Code.fromInline(`
-          def handler(event, context):
-            print(event)
-            return {
-              'statusCode': 200,
-              'body': 'Event received'
-            }
-          `),
+        handler: 'app.handler',
+        code: lambda.Code.fromAsset(`./projects/${functionName}`),
         environment,
+        functionName
       });
     };
 
-    const fhirBundleProcessor = createLambdaFunction('fhir-bundle-processor', { DESTINATION_BUCKET: fhirResourcesBucket.bucketName });
+    const fhirBundleProcessor = createLambdaFunction('fhir-bundle-processor', { 
+      DESTINATION_TOPIC_ARN: fhirBundleTopic.topicArn 
+    });
     const fhirPatientProcessor = createLambdaFunction('fhir-patient-processor', { DESTINATION_BUCKET: fhirResourcesBucket.bucketName });
     const fhirClaimsProcessor = createLambdaFunction('fhir-claims-processor', { DESTINATION_BUCKET: fhirResourcesBucket.bucketName });
     const fhirVisitsProcessor = createLambdaFunction('fhir-visits-processor', { DESTINATION_BUCKET: fhirResourcesBucket.bucketName });
@@ -133,6 +143,9 @@ export class FhirAwsPipelineStack extends cdk.Stack {
     fhirResourcesBucket.grantWrite(fhirDiagnosisProcessor);
     fhirResourcesBucket.grantWrite(fhirProceduresProcessor);
     fhirResourcesBucket.grantWrite(fhirMedicationsProcessor);
+
+    // Grant publish permissions to the Lambda function
+    fhirBundleTopic.grantPublish(fhirBundleProcessor);
 
     // S3 Bucket Notifications
     fhirBundleSourceBucket.addEventNotification(s3.EventType.OBJECT_CREATED, new s3n.SqsDestination(fhirBundleQueue.queue));
@@ -168,6 +181,7 @@ export class FhirAwsPipelineStack extends cdk.Stack {
       `),
       environment: {
       DESTINATION_BUCKET: fhirBundleSourceBucket.bucketName,
+      name: 'fhir-bundle-to-s3',
       },
     });
 
