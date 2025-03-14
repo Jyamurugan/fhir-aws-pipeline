@@ -1,2 +1,0 @@
-boto3>=1.37.12
-fhir-resources>=8.0.0
