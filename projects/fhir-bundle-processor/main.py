@@ -34,7 +34,7 @@ def handler(event, context):
             return {
             'statusCode': 400,
             'body': 'Error parsing FHIR bundle'
-            }
+            },
 
         # Extract resources
         resources = {
@@ -48,7 +48,7 @@ def handler(event, context):
 
         for entry in bundle.entry:
             resource = entry.resource
-            resource_type = resource.resource_type
+            resource_type = resource.__resource_type__
             if resource_type in resources:
                 resources[resource_type].append(resource.json())
         logger.info("Successfully extracted resources from FHIR bundle")
@@ -58,8 +58,13 @@ def handler(event, context):
             for resource in resource_list:
                 sns_client.publish(
                     TopicArn=topic_arn,
-                    Message=json.dumps({'default': resource}),
-                    MessageStructure='json'
+                    Message=json.dumps(resource),
+                    MessageAttributes={
+                        'ResourceType': {
+                            'DataType': 'String',
+                            'StringValue': resource_type
+                        }
+                    }
                 )
         logger.info("Successfully published resources to SNS")
 

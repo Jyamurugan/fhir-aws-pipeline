@@ -1,0 +1,38 @@
+{
+    "Records": [
+      {
+        "eventVersion": "2.1",
+        "eventSource": "aws:s3",
+        "awsRegion": "us-east-2",
+        "eventTime": "2025-03-17T08:19:29.076Z",
+        "eventName": "ObjectCreated:CompleteMultipartUpload",
+        "userIdentity": {
+          "principalId": "A2GEN759DTK7LO"
+        },
+        "requestParameters": {
+          "sourceIPAddress": "60.243.25.253"
+        },
+        "responseElements": {
+          "x-amz-request-id": "BEZTJ41YZ47QCCB9",
+          "x-amz-id-2": "q4uDL+9fDIBFYJ7Ziwabe/nzPCsHAvqIfOst33uiTztb7jsrDiW6F0x6PKkSb/jXZc2MnRhUnmUW6NxYsaetUa9Hog9vqfpOGJyHWXKlZRA="
+        },
+        "s3": {
+          "s3SchemaVersion": "1.0",
+          "configurationId": "YjAxZmJiNzktYTkwNC00NmU3LWJlYWMtY2JlZGRkZmI5Y2Q3",
+          "bucket": {
+            "name": "fhirawspipelinestack-fhirbundlesource9148c851-abt6l4ckyk5i",
+            "ownerIdentity": {
+              "principalId": "A2GEN759DTK7LO"
+            },
+            "arn": "arn:aws:s3:::fhirawspipelinestack-fhirbundlesource9148c851-abt6l4ckyk5i"
+          },
+          "object": {
+            "key": "Zenia843_Genesis248_Weimann465_655baba7-47ed-22ac-2093-1196ebb44928.json",
+            "size": 20943429,
+            "eTag": "c3bf25756cace0ade82f18a040a7640e-2",
+            "sequencer": "0067D7DB0A4FDD528B"
+          }
+        }
+      }
+    ]
+  }
