@@ -29,3 +29,12 @@ cd ..\..\..\
 # Add main.py to the package
 Compress-Archive -Path main.py -Update -DestinationPath packages\package.zip
 ```
+
+### Deployment to Lambda
+``` cmd
+pip install -r requirements.txt --platform manylinux2014_x86_64 -t . --only-binary=:all: --target dist
+cd dist
+7z a -tzip package.zip *
+
+## copy main.py to dist then zip all files inside dist using 7zip (.zip format)
+```

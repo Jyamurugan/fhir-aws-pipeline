@@ -83,9 +83,7 @@ export class FhirAwsPipelineStack extends cdk.Stack {
     // S3 Buckets
     const fhirBundleSourceBucket = new s3.Bucket(this, 'fhir-bundle-source');
     const fhirResourcesBucket = new s3.Bucket(this, 'fhir-resources');
-    const sourcecodebucket = new s3.Bucket(this, 'sourcecodebucket', {
-      bucketName: `${accountId}-fhir-pipeline-source`,
-    });
+    const sourcecodebucket = s3.Bucket.fromBucketName(this, 'sourcecodebucket', `${accountId}-fhir-pipeline-source`);
 
     // SQS Queues and Dead Letter Queues
     const createQueueWithDLQ = (queueName: string) => {
@@ -101,22 +99,22 @@ export class FhirAwsPipelineStack extends cdk.Stack {
 
     const fhirBundleQueue = createQueueWithDLQ('fhir-bundle-queue');
     const fhirPatientQueue = createQueueWithDLQ('fhir-patient-queue');
-    const fhirClaimsQueue = createQueueWithDLQ('fhir-claims-queue');
-    const fhirVisitsQueue = createQueueWithDLQ('fhir-visits-queue');
-    const fhirDiagnosisQueue = createQueueWithDLQ('fhir-diagnosis-queue');
-    const fhirProceduresQueue = createQueueWithDLQ('fhir-procedures-queue');
-    const fhirMedicationsQueue = createQueueWithDLQ('fhir-medications-queue');
+    // const fhirClaimsQueue = createQueueWithDLQ('fhir-claims-queue');
+    // const fhirVisitsQueue = createQueueWithDLQ('fhir-visits-queue');
+    // const fhirDiagnosisQueue = createQueueWithDLQ('fhir-diagnosis-queue');
+    // const fhirProceduresQueue = createQueueWithDLQ('fhir-procedures-queue');
+    // const fhirMedicationsQueue = createQueueWithDLQ('fhir-medications-queue');
 
     // SNS Topic
     const fhirBundleTopic = new sns.Topic(this, 'fhir-bundle-topic');
 
     // Subscribe SQS queues to the SNS topic
     fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirPatientQueue.queue));
-    fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirClaimsQueue.queue));
-    fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirVisitsQueue.queue));
-    fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirDiagnosisQueue.queue));
-    fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirProceduresQueue.queue));
-    fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirMedicationsQueue.queue));
+    // fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirClaimsQueue.queue));
+    // fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirVisitsQueue.queue));
+    // fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirDiagnosisQueue.queue));
+    // fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirProceduresQueue.queue));
+    // fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirMedicationsQueue.queue));
 
     // Lambda Functions
     const createLambdaFunction = (functionName: string, environment?: { [key: string]: string }) => {
@@ -132,21 +130,22 @@ export class FhirAwsPipelineStack extends cdk.Stack {
     const fhirBundleProcessor = createLambdaFunction('fhir-bundle-processor', { 
       DESTINATION_TOPIC_ARN: fhirBundleTopic.topicArn 
     });
+    fhirBundleSourceBucket.grantRead(fhirBundleProcessor);
     const fhirPatientProcessor = createLambdaFunction('fhir-patient-processor', { DESTINATION_BUCKET: fhirResourcesBucket.bucketName });
-    const fhirClaimsProcessor = createLambdaFunction('fhir-claims-processor', { DESTINATION_BUCKET: fhirResourcesBucket.bucketName });
-    const fhirVisitsProcessor = createLambdaFunction('fhir-visits-processor', { DESTINATION_BUCKET: fhirResourcesBucket.bucketName });
-    const fhirDiagnosisProcessor = createLambdaFunction('fhir-diagnosis-processor', { DESTINATION_BUCKET: fhirResourcesBucket.bucketName });
-    const fhirProceduresProcessor = createLambdaFunction('fhir-procedures-processor', { DESTINATION_BUCKET: fhirResourcesBucket.bucketName });
-    const fhirMedicationsProcessor = createLambdaFunction('fhir-medications-processor', { DESTINATION_BUCKET: fhirResourcesBucket.bucketName });
+    // const fhirClaimsProcessor = createLambdaFunction('fhir-claims-processor', { DESTINATION_BUCKET: fhirResourcesBucket.bucketName });
+    // const fhirVisitsProcessor = createLambdaFunction('fhir-visits-processor', { DESTINATION_BUCKET: fhirResourcesBucket.bucketName });
+    // const fhirDiagnosisProcessor = createLambdaFunction('fhir-diagnosis-processor', { DESTINATION_BUCKET: fhirResourcesBucket.bucketName });
+    // const fhirProceduresProcessor = createLambdaFunction('fhir-procedures-processor', { DESTINATION_BUCKET: fhirResourcesBucket.bucketName });
+    // const fhirMedicationsProcessor = createLambdaFunction('fhir-medications-processor', { DESTINATION_BUCKET: fhirResourcesBucket.bucketName });
 
     // Grant write permissions to the Lambda functions
     fhirResourcesBucket.grantWrite(fhirBundleProcessor);
     fhirResourcesBucket.grantWrite(fhirPatientProcessor);
-    fhirResourcesBucket.grantWrite(fhirClaimsProcessor);
-    fhirResourcesBucket.grantWrite(fhirVisitsProcessor);
-    fhirResourcesBucket.grantWrite(fhirDiagnosisProcessor);
-    fhirResourcesBucket.grantWrite(fhirProceduresProcessor);
-    fhirResourcesBucket.grantWrite(fhirMedicationsProcessor);
+    // fhirResourcesBucket.grantWrite(fhirClaimsProcessor);
+    // fhirResourcesBucket.grantWrite(fhirVisitsProcessor);
+    // fhirResourcesBucket.grantWrite(fhirDiagnosisProcessor);
+    // fhirResourcesBucket.grantWrite(fhirProceduresProcessor);
+    // fhirResourcesBucket.grantWrite(fhirMedicationsProcessor);
 
     // Grant publish permissions to the Lambda function
     fhirBundleTopic.grantPublish(fhirBundleProcessor);
@@ -165,11 +164,11 @@ export class FhirAwsPipelineStack extends cdk.Stack {
 
     fhirBundleProcessor.addEventSource(createBatchEventSource(fhirBundleQueue.queue));
     fhirPatientProcessor.addEventSource(createBatchEventSource(fhirPatientQueue.queue));
-    fhirClaimsProcessor.addEventSource(createBatchEventSource(fhirClaimsQueue.queue));
-    fhirVisitsProcessor.addEventSource(createBatchEventSource(fhirVisitsQueue.queue));
-    fhirDiagnosisProcessor.addEventSource(createBatchEventSource(fhirDiagnosisQueue.queue));
-    fhirProceduresProcessor.addEventSource(createBatchEventSource(fhirProceduresQueue.queue));
-    fhirMedicationsProcessor.addEventSource(createBatchEventSource(fhirMedicationsQueue.queue));
+    // fhirClaimsProcessor.addEventSource(createBatchEventSource(fhirClaimsQueue.queue));
+    // fhirVisitsProcessor.addEventSource(createBatchEventSource(fhirVisitsQueue.queue));
+    // fhirDiagnosisProcessor.addEventSource(createBatchEventSource(fhirDiagnosisQueue.queue));
+    // fhirProceduresProcessor.addEventSource(createBatchEventSource(fhirProceduresQueue.queue));
+    // fhirMedicationsProcessor.addEventSource(createBatchEventSource(fhirMedicationsQueue.queue));
 
     // Workflow 2 - API Gateway and Lambda Function
     const fhirBundleToS3 = new lambda.Function(this, 'fhir-bundle-to-s3', {

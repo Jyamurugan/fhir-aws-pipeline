@@ -1,18 +1,29 @@
 param (
-    [string]$ProjectName
+    [string]$folderPath
 )
 
-function Package-Project {
-    param (
-        [string]$ProjectName
-    )
+# Navigate to the provided folder path
+Set-Location -Path $folderPath
 
-    Add-Type -AssemblyName System.IO.Compression.FileSystem
-    [System.IO.Compression.ZipFile]::CreateFromDirectory("$ProjectName\venv\Lib\site-packages", "$ProjectName\package.zip")
+# Install the required packages
+pip install -r requirements.txt --platform manylinux2014_x86_64 --only-binary=:all: --target dist
 
+# Change directory to 'dist'
+Set-Location -Path "dist"
 
-    Compress-Archive -Path "$ProjectName\main.py" -Update -DestinationPath "$ProjectName\package.zip"
+# Remove the existing package.zip if it exists
+if (Test-Path -Path "package.zip") {
+    Remove-Item -Path "package.zip" -Force
 }
 
-# Call the function with the provided parameter
-Package-Project -ProjectName $ProjectName
+# Create a zip package of the contents, excluding package.zip
+7z a -tzip package.zip -xr!package.zip *
+
+# Extract the folder name from the provided path
+$folderName = Split-Path -Leaf $folderPath
+
+# Upload the zip package to the specified S3 bucket
+aws s3 cp package.zip "s3://970279879940-fhir-pipeline-source/projects/$folderName/"
+
+# Navigate back to the root directory
+Set-Location -Path "..\.."
