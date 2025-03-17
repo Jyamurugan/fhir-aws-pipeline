@@ -1,10 +1,38 @@
 import json
-import boto3
-import os
 from fhir.resources.R4B.procedure import Procedure
 
-s3 = boto3.client('s3')
-destination_bucket = os.environ['DESTINATION_BUCKET']
+test_data = """
+{
+      "resourceType": "Procedure",
+      "id": "207a0593-7e4e-0556-b8ba-f70f7a3e0f44",
+      "meta": {
+        "profile": [ "http://hl7.org/fhir/us/core/StructureDefinition/us-core-procedure" ]
+      },
+      "status": "completed",
+      "code": {
+        "coding": [ {
+          "system": "http://snomed.info/sct",
+          "code": "710824005",
+          "display": "Assessment of health and social care needs (procedure)"
+        } ],
+        "text": "Assessment of health and social care needs (procedure)"
+      },
+      "subject": {
+        "reference": "urn:uuid:dbc4a3f7-9c69-4435-3ce3-4e1988ab6b91"
+      },
+      "encounter": {
+        "reference": "urn:uuid:eaeb9228-4420-5e9c-b217-4c1a98ff9fe0"
+      },
+      "performedPeriod": {
+        "start": "2015-09-05T21:57:47+00:00",
+        "end": "2015-09-05T22:48:16+00:00"
+      },
+      "location": {
+        "reference": "Location?identifier=https://github.com/synthetichealth/synthea|16162e2e-393c-3162-8e09-a84a60d825c4",
+        "display": "WHITLEY WELLNESS LLC"
+      }
+    }
+"""
 
 def flatten_procedure(procedure: Procedure):
   """
@@ -32,20 +60,6 @@ def flatten_procedure(procedure: Procedure):
 
   return {k: v for k, v in flattened.items() if v is not None}
 
-def handler(event, context):
-    print(json.dumps(event))
-    for record in event['Records']:
-        messageBody = json.loads(record['body'])
-        procedureJSONString = json.loads(messageBody['Message'])
-        print(procedureJSONString)
-        procedure = Procedure.model_validate_json(procedureJSONString)
-        flattened_procedure = flatten_procedure(procedure)
-        s3.put_object(
-            Bucket=destination_bucket,
-            Key=f"Procedures/{flattened_procedure['id']}.json",
-            Body=json.dumps(flattened_procedure, default=str)
-        )
-    return {
-        'statusCode': 200,
-        'body': 'Processed successfully'
-    }
+flattened_condition = flatten_procedure(Procedure.model_validate_json((test_data)))
+
+print(json.dumps(flattened_condition, default=str, indent=2))

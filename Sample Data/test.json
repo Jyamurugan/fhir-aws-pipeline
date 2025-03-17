@@ -227,6 +227,90 @@
         "method": "POST",
         "url": "Patient"
       }
+    },
+    {
+      "fullUrl": "urn:uuid:802c9b6e-8b93-c088-4846-93e938dba290",
+      "resource": {
+        "resourceType": "Claim",
+        "id": "802c9b6e-8b93-c088-4846-93e938dba290",
+        "status": "active",
+        "type": {
+          "coding": [ {
+            "system": "http://terminology.hl7.org/CodeSystem/claim-type",
+            "code": "professional"
+          } ]
+        },
+        "use": "claim",
+        "patient": {
+          "reference": "urn:uuid:dbc4a3f7-9c69-4435-3ce3-4e1988ab6b91",
+          "display": "Ada662 Sari509 Balistreri607"
+        },
+        "billablePeriod": {
+          "start": "1976-09-18T21:57:47+00:00",
+          "end": "1976-09-18T22:12:47+00:00"
+        },
+        "created": "1976-09-18T22:12:47+00:00",
+        "provider": {
+          "reference": "Organization?identifier=https://github.com/synthetichealth/synthea|e2a8b444-9b8f-36ff-84c4-05ee98589482",
+          "display": "WHITLEY WELLNESS LLC"
+        },
+        "priority": {
+          "coding": [ {
+            "system": "http://terminology.hl7.org/CodeSystem/processpriority",
+            "code": "normal"
+          } ]
+        },
+        "facility": {
+          "reference": "Location?identifier=https://github.com/synthetichealth/synthea|16162e2e-393c-3162-8e09-a84a60d825c4",
+          "display": "WHITLEY WELLNESS LLC"
+        },
+        "diagnosis": [ {
+          "sequence": 1,
+          "diagnosisReference": {
+            "reference": "urn:uuid:fed419a9-b9b2-130d-2cc0-8623220c0d9b"
+          }
+        } ],
+        "insurance": [ {
+          "sequence": 1,
+          "focal": true,
+          "coverage": {
+            "display": "NO_INSURANCE"
+          }
+        } ],
+        "item": [ {
+          "sequence": 1,
+          "productOrService": {
+            "coding": [ {
+              "system": "http://snomed.info/sct",
+              "code": "410620009",
+              "display": "Well child visit (procedure)"
+            } ],
+            "text": "Well child visit (procedure)"
+          },
+          "encounter": [ {
+            "reference": "urn:uuid:2fae0e14-5528-1dc9-e682-5bd60bf7e018"
+          } ]
+        }, {
+          "sequence": 2,
+          "diagnosisSequence": [ 1 ],
+          "productOrService": {
+            "coding": [ {
+              "system": "http://snomed.info/sct",
+              "code": "160968000",
+              "display": "Risk activity involvement (finding)"
+            } ],
+            "text": "Risk activity involvement (finding)"
+          }
+        } ],
+        "total": {
+          "value": 704.20,
+          "currency": "USD"
+        }
+      },
+      "request": {
+        "method": "POST",
+        "url": "Claim"
+      }
     }
   ]
 }

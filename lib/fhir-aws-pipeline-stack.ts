@@ -93,6 +93,7 @@ export class FhirAwsPipelineStack extends cdk.Stack {
           queue: dlq,
           maxReceiveCount: 5,
         },
+        visibilityTimeout: cdk.Duration.seconds(70),
       });
       return { queue, dlq };
     };
@@ -118,7 +119,13 @@ export class FhirAwsPipelineStack extends cdk.Stack {
         }
       }
     ));
-    fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirClaimsQueue.queue));
+    fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirClaimsQueue.queue, {
+      filterPolicy: {
+        resourceType: sns.SubscriptionFilter.stringFilter({
+          allowlist: ['Claim'],
+        }),
+      }
+    }));
     // fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirVisitsQueue.queue));
     // fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirDiagnosisQueue.queue));
     // fhirBundleTopic.addSubscription(new sns_subscriptions.SqsSubscription(fhirProceduresQueue.queue));

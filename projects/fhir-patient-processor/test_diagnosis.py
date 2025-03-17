@@ -1,10 +1,49 @@
 import json
-import boto3
-import os
 from fhir.resources.R4B.condition import Condition
 
-s3 = boto3.client('s3')
-destination_bucket = os.environ['DESTINATION_BUCKET']
+condition = """{
+      "resourceType": "Condition",
+      "id": "1a928eaf-9794-92dc-4976-7622f29c8055",
+      "meta": {
+        "profile": [ "http://hl7.org/fhir/us/core/StructureDefinition/us-core-condition-encounter-diagnosis" ]
+      },
+      "clinicalStatus": {
+        "coding": [ {
+          "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+          "code": "active"
+        } ]
+      },
+      "verificationStatus": {
+        "coding": [ {
+          "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+          "code": "confirmed"
+        } ]
+      },
+      "category": [ {
+        "coding": [ {
+          "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+          "code": "encounter-diagnosis",
+          "display": "Encounter Diagnosis"
+        } ]
+      } ],
+      "code": {
+        "coding": [ {
+          "system": "http://snomed.info/sct",
+          "code": "224299000",
+          "display": "Received higher education (finding)"
+        } ],
+        "text": "Received higher education (finding)"
+      },
+      "subject": {
+        "reference": "urn:uuid:dbc4a3f7-9c69-4435-3ce3-4e1988ab6b91"
+      },
+      "encounter": {
+        "reference": "urn:uuid:08fd968f-bf87-723d-ce42-2b844106e4d1"
+      },
+      "onsetDateTime": "1977-09-24T22:47:39+00:00",
+      "recordedDate": "1977-09-24T22:47:39+00:00"
+    }
+"""
 
 def flatten_condition(condition: Condition):
     """
@@ -36,20 +75,6 @@ def flatten_condition(condition: Condition):
 
     return {k: v for k, v in flattened.items() if v is not None}
 
-def handler(event, context):
-    print(json.dumps(event))
-    for record in event['Records']:
-        messageBody = json.loads(record['body'])
-        conditionJSONString = json.loads(messageBody['Message'])
-        print(conditionJSONString)
-        condition = Condition.model_validate_json(conditionJSONString)
-        flattened_condition = flatten_condition(condition)
-        s3.put_object(
-            Bucket=destination_bucket,
-            Key=f"Conditions/{flattened_condition['id']}.json",
-            Body=json.dumps(flattened_condition, default=str)
-        )
-    return {
-        'statusCode': 200,
-        'body': 'Processed successfully'
-    }
+flattened_condition = flatten_condition(Condition.model_validate_json((condition)))
+
+print(json.dumps(flattened_condition, default=str, indent=2))
