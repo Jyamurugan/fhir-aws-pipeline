@@ -1,0 +1,13 @@
+{
+    "resourceType": "Patient",
+    "id": "dbc4a3f7-9c69-4435-3ce3-4e1988ab6b91",
+    "name": "Ada662 Sari509 Balistreri607",
+    "gender": "female",
+    "birthDate": "1959-08-01",
+    "address": "315 Simonis Parade, Somerville, MA, 02138, US",
+    "phone": "555-428-1241",
+    "maritalStatus": "Married",
+    "race": "White",
+    "ethnicity": "Not Hispanic or Latino",
+    "birthPlace": "Orleans, Massachusetts, US"
+  }

@@ -17,6 +17,7 @@ export class FhirAwsPipelineStack extends cdk.Stack {
         region: 'us-east-2',
       },
     });
+    const accountId = cdk.Stack.of(this).account;
     /**
      * S3 Bucket: fhir-bundle-source
      * S3 Bucket: fhir-resources
@@ -82,6 +83,9 @@ export class FhirAwsPipelineStack extends cdk.Stack {
     // S3 Buckets
     const fhirBundleSourceBucket = new s3.Bucket(this, 'fhir-bundle-source');
     const fhirResourcesBucket = new s3.Bucket(this, 'fhir-resources');
+    const sourcecodebucket = new s3.Bucket(this, 'sourcecodebucket', {
+      bucketName: `${accountId}-fhir-pipeline-source`,
+    });
 
     // SQS Queues and Dead Letter Queues
     const createQueueWithDLQ = (queueName: string) => {
@@ -117,11 +121,11 @@ export class FhirAwsPipelineStack extends cdk.Stack {
     // Lambda Functions
     const createLambdaFunction = (functionName: string, environment?: { [key: string]: string }) => {
       return new lambda.Function(this, functionName, {
-        runtime: lambda.Runtime.PYTHON_3_13,
-        handler: 'app.main.handler',
-        code: lambda.Code.fromAsset(`projects/${functionName}/package.zip`),
-        environment,
-        functionName
+      runtime: lambda.Runtime.PYTHON_3_13,
+      handler: 'main.handler',
+      code: lambda.Code.fromBucket(sourcecodebucket, `projects/${functionName}/package.zip`),
+      environment,
+      functionName
       });
     };
 
@@ -169,7 +173,7 @@ export class FhirAwsPipelineStack extends cdk.Stack {
 
     // Workflow 2 - API Gateway and Lambda Function
     const fhirBundleToS3 = new lambda.Function(this, 'fhir-bundle-to-s3', {
-      runtime: lambda.Runtime.PYTHON_3_9,
+      runtime: lambda.Runtime.PYTHON_3_13,
       handler: 'index.handler',
       code: lambda.Code.fromInline(`
       def handler(event, context):
