@@ -14,7 +14,8 @@ topic_arn = os.environ['DESTINATION_TOPIC_ARN']
 def handler(event, context):
     try:
         # Parse the S3 event
-        s3_event = event['Records'][0]['s3']
+        s3_records = json.loads(event['Records'][0]['body'])
+        s3_event = s3_records['Records'][0]['s3']
         bucket_name = s3_event['bucket']['name']
         object_key = s3_event['object']['key']
         logger.info(f"Received event for bucket: {bucket_name}, key: {object_key}")
@@ -34,7 +35,7 @@ def handler(event, context):
             return {
             'statusCode': 400,
             'body': 'Error parsing FHIR bundle'
-            },
+            }
 
         # Extract resources
         resources = {
@@ -42,8 +43,7 @@ def handler(event, context):
             'Claim': [],
             'Condition': [],
             'Encounter': [],
-            'Procedure': [],
-            # 'MedicationRequest': []
+            'Procedure': []
         }
 
         for entry in bundle.entry:
@@ -60,7 +60,7 @@ def handler(event, context):
                     TopicArn=topic_arn,
                     Message=json.dumps(resource),
                     MessageAttributes={
-                        'ResourceType': {
+                        'resourceType': {
                             'DataType': 'String',
                             'StringValue': resource_type
                         }
