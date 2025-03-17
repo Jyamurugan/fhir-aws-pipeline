@@ -1,38 +1,21 @@
 {
-    "Records": [
+  "Records": [
       {
-        "eventVersion": "2.1",
-        "eventSource": "aws:s3",
-        "awsRegion": "us-east-2",
-        "eventTime": "2025-03-17T08:19:29.076Z",
-        "eventName": "ObjectCreated:CompleteMultipartUpload",
-        "userIdentity": {
-          "principalId": "A2GEN759DTK7LO"
-        },
-        "requestParameters": {
-          "sourceIPAddress": "60.243.25.253"
-        },
-        "responseElements": {
-          "x-amz-request-id": "BEZTJ41YZ47QCCB9",
-          "x-amz-id-2": "q4uDL+9fDIBFYJ7Ziwabe/nzPCsHAvqIfOst33uiTztb7jsrDiW6F0x6PKkSb/jXZc2MnRhUnmUW6NxYsaetUa9Hog9vqfpOGJyHWXKlZRA="
-        },
-        "s3": {
-          "s3SchemaVersion": "1.0",
-          "configurationId": "YjAxZmJiNzktYTkwNC00NmU3LWJlYWMtY2JlZGRkZmI5Y2Q3",
-          "bucket": {
-            "name": "fhirawspipelinestack-fhirbundlesource9148c851-abt6l4ckyk5i",
-            "ownerIdentity": {
-              "principalId": "A2GEN759DTK7LO"
-            },
-            "arn": "arn:aws:s3:::fhirawspipelinestack-fhirbundlesource9148c851-abt6l4ckyk5i"
+          "messageId": "b4c2487a-aacc-475f-9478-2f6809faefb5",
+          "receiptHandle": "AQEBYEmOhWj2FT0V+XVdf36unXh9hDsMfeLOW+2yC5DYZ9OBQqsq/cREP60zj+WXgMB3dDP1SdfA+Gkl7J1YwKZveN5MFuuS8c0N7B4Hb7e8ZXaiw0i45zGG6q3Qa+rXE/FwWMPXXfmUx+749sAmADdxgwDA9ZM+OzR+1UYnqWkBXEm5AzsFjiMoxhtEDf6i0qny5AfvZbJ1NGfBbZ7O/nGVfGysNqIiq1lSG8vhm4GRjJJfe5MhTj2JX0WDN5j93CMr3Sc3ggN/Lb/YQpXE4GBWqT4glRcGIHAgzajuKp9wS373i6PAmfoQd3ixvRAsli5gkv/sR09GvD+yZ7WOCYLqtKgYZOmAj66UI11HbFy2bHxd+1LIN5j0xVOuLUEZ/zJhRZJLe/GaVKqMRqKu15vR463MvmdTm8xPn3AH2W54u8W8Vdb1ypGoMkyD17GwdXxeS1w2iayQFukJs1Hi/WkVag==",
+          "body": "{\"Records\":[{\"eventVersion\":\"2.1\",\"eventSource\":\"aws:s3\",\"awsRegion\":\"us-east-2\",\"eventTime\":\"2025-03-17T14:56:30.372Z\",\"eventName\":\"ObjectCreated:Put\",\"userIdentity\":{\"principalId\":\"A2GEN759DTK7LO\"},\"requestParameters\":{\"sourceIPAddress\":\"60.243.25.253\"},\"responseElements\":{\"x-amz-request-id\":\"HN66FDBKQPBT49MF\",\"x-amz-id-2\":\"Rgq2+LjTdMW5rFICWq3GTjuZRucLzdOyd1wLkMRh/MR7T9/ijyVdlL4EKe0RdhAMpHvPI7byL3mlAoXkfw5555ZucPyH5QcY\"},\"s3\":{\"s3SchemaVersion\":\"1.0\",\"configurationId\":\"YjAxZmJiNzktYTkwNC00NmU3LWJlYWMtY2JlZGRkZmI5Y2Q3\",\"bucket\":{\"name\":\"fhirawspipelinestack-fhirbundlesource9148c851-abt6l4ckyk5i\",\"ownerIdentity\":{\"principalId\":\"A2GEN759DTK7LO\"},\"arn\":\"arn:aws:s3:::fhirawspipelinestack-fhirbundlesource9148c851-abt6l4ckyk5i\"},\"object\":{\"key\":\"Yun266_Ernser583_37713015-cfb5-bf1a-70eb-970101f32341.json\",\"size\":1159183,\"eTag\":\"27cfcbfe9d4548b7fccf3b9b47e9ef19\",\"sequencer\":\"0067D8381E4E535D46\"}}}]}",
+          "attributes": {
+              "ApproximateReceiveCount": "1",
+              "SentTimestamp": "1742223391141",
+              "SenderId": "AROASH5U5TZXDEGJDLSUI:S3-PROD-END",
+              "ApproximateFirstReceiveTimestamp": "1742223391148"
           },
-          "object": {
-            "key": "Zenia843_Genesis248_Weimann465_655baba7-47ed-22ac-2093-1196ebb44928.json",
-            "size": 20943429,
-            "eTag": "c3bf25756cace0ade82f18a040a7640e-2",
-            "sequencer": "0067D7DB0A4FDD528B"
-          }
-        }
+          "messageAttributes": {},
+          "md5OfMessageAttributes": null,
+          "md5OfBody": "9d7a2972c1d37ca815823ac3044155e7",
+          "eventSource": "aws:sqs",
+          "eventSourceARN": "arn:aws:sqs:us-east-2:970279879940:FhirAwsPipelineStack-fhirbundlequeueABE48E76-8a5Rb4ZeTJuF",
+          "awsRegion": "us-east-2"
       }
-    ]
-  }
+  ]
+}
