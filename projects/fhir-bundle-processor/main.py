@@ -43,7 +43,7 @@ def handler(event, context):
             'Condition': [],
             'Encounter': [],
             'Procedure': [],
-            'Medication': []
+            # 'MedicationRequest': []
         }
 
         for entry in bundle.entry:
